@@ -104,7 +104,7 @@ export default {
   watch: {
     selectedSort(newValue) {
       this.posts.sort((post1, post2) => {
-        return console.log( post1[newValue]?.localeCompare(post2[newValue]));
+        return post1[newValue]?.localeCompare(post2[newValue]);
       })
     }
   }
