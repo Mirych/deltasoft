@@ -47,28 +47,25 @@ export default {
     async fetchPosts() {
       try {
         this.isPostsLoading = true;          
-        const postsResponse = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=20');
-        const usersResponse = await axios.get('https://jsonplaceholder.typicode.com/users');
-        this.posts = postsResponse.data;                      
-        this.posts.forEach(async (post) => {               
-          let user = await this.getUser(post.userId);
-        })                
+        const postsResponse = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=20');        
+        this.posts = postsResponse.data;       
+        for (let index = 0; index < this.posts.length; index++) {
+          const element = this.posts[index];
+          let userId = element.userId;
+          let user = await this.getUser(userId);          
+        }              
       } catch (e) {
         alert('Ошибка')
       } finally {
         this.isPostsLoading = false;  
       }
     },
-    async getUser(id) {
-      console.log(id);
-      let user = this.cachedUsers.filter(u => u.id != id);
-
-      console.log(user);
+    async getUser(id) {      
+      let user = this.cachedUsers.find(u => u.id == id);
       
       if (user == undefined) {
-        user = (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data;
-        this.cachedUsers.push(user);
-        
+        user = (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data;        
+        this.cachedUsers.push(user);                      
         console.log("Fetched from server")
       } else {
         console.log("Fetched from cache")
