@@ -6,8 +6,7 @@
       <div class="input-field">
         <input 
           v-model="searchQuery"      
-          type="search" 
-          
+          type="search"
         >
         <label for="search">Поиск по названию</label>
       </div>
@@ -66,7 +65,6 @@
 <script>
 /* eslint-disable */
 import axios from 'axios'
-import materialize from 'materialize-css'
 import MySelect from './components/MySelect.vue'
 
 export default {
