@@ -1,11 +1,11 @@
 <template>
-<div class="input-field">
-    <select :value="modelValue" @change="changeOption" style="display: block">
-        <option disabled value="">Выберите из списка</option>
+<div>
+    <select :value="modelValue" @change="changeOption">
+        <option disabled value="">Сортировка</option>
         <option 
             v-for="option in options"  
             :key="option.value"
-            :value="option.value"
+            :value="option.value"            
         >
         {{ option.name }}        
         </option>

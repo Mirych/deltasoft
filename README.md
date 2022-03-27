@@ -1,5 +1,6 @@
 # deltasoft
-
+Страница постов с API https://jsonplaceholder.typicode.com/.
+Вывод названия и автора поста с сортировкой, поиском и пагинацией
 ## Project setup
 ```
 npm install
