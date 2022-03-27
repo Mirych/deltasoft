@@ -1,12 +1,27 @@
 <template>
-<div>
+<div class="container">
+  <h1>Посты</h1>
+  
+  <div class="input-field col s12">
+    <input 
+      v-model="searchQuery"
+      id="" 
+      type="email" 
+      class="validate"
+    >
+    <label for="email">Поиск</label>
+  </div>
+  <my-select 
+    v-model="selectedSort"
+    :options="sortOptions"
+  />
   <div v-if="!isPostsLoading">    
     <div class="card" v-for="post in posts" :key="post.id">
       <div class="card-content hoverable blue lighten-5">
         <span class="card-title activator grey-text text-darken-4">{{ post.title }}
           <i class="right small material-icons">arrow_drop_down</i></span>        
         <!-- <i class="material-icons right">...</i>< -->
-        <p>Author</p>
+        <p>{{post.name}}</p>
       </div>
       <div class="card-reveal blue lighten-3">
         <span class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
@@ -33,14 +48,22 @@
 /* eslint-disable */
 import axios from 'axios'
 import materialize from 'materialize-css'
+import MySelect from './components/MySelect.vue'
 
 export default {
+  components: { MySelect },
   name: 'App',
   data() {
     return {
       posts: [],
       cachedUsers: [],
-      isPostsLoading: false
+      isPostsLoading: false,
+      searchQuery: '',
+      selectedSort: '',
+      sortOptions: [
+        {value: 'title', name: 'По названию'},
+        {value: 'body', name: 'По содержимому'}
+      ]
     }
   },
   methods: {
@@ -52,7 +75,8 @@ export default {
         for (let index = 0; index < this.posts.length; index++) {
           const element = this.posts[index];
           let userId = element.userId;
-          let user = await this.getUser(userId);          
+          let user = await this.getUser(userId);   
+          this.posts[index].name = user.name;                         
         }              
       } catch (e) {
         alert('Ошибка')
@@ -66,9 +90,9 @@ export default {
       if (user == undefined) {
         user = (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data;        
         this.cachedUsers.push(user);                      
-        console.log("Fetched from server")
+        // console.log("Fetched from server")
       } else {
-        console.log("Fetched from cache")
+        // console.log("Fetched from cache")
       }
 
       return user;
@@ -76,6 +100,13 @@ export default {
   },
   mounted() {
     this.fetchPosts();
+  },
+  watch: {
+    selectedSort(newValue) {
+      this.posts.sort((post1, post2) => {
+        return console.log( post1[newValue]?.localeCompare(post2[newValue]));
+      })
+    }
   }
 }
 </script>
